@@ -1,0 +1,28 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+if Vagrant.has_plugin? "vagrant-vbguest"
+  config.vbguest.no_install = true
+  config.vbguest.auto_update = false
+  config.vbguest.no_remote = true
+end
+config.vm.define :web1 do |web1|
+web1.vm.box = "bento/ubuntu-20.04"
+web1.vm.network :private_network, ip: "192.168.100.6"
+web1.vm.provision "shell", path: "server1.sh"
+web1.vm.hostname = "web1"
+end
+config.vm.define :web2 do |web2|
+web2.vm.box = "bento/ubuntu-20.04"
+web2.vm.network :private_network, ip: "192.168.100.7"
+web2.vm.provision "shell", path: "server2.sh"
+web2.vm.hostname = "web2"
+end
+config.vm.define :haproxyUbuntu do |haproxyUbuntu|
+haproxyUbuntu.vm.box = "bento/ubuntu-20.04"
+haproxyUbuntu.vm.network :private_network, ip: "192.168.100.8"
+haproxyUbuntu.vm.provision "shell", path: "happ.sh"
+haproxyUbuntu.vm.hostname = "haproxyUbuntu"
+end
+end
